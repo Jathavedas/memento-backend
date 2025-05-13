@@ -11,7 +11,13 @@ const DB = process.env.MONGO_URI;
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(cors());
+// Allow requests from your Vercel frontend
+app.use(cors({
+  origin: 'https://memento-world.vercel.app',
+  methods: ['GET', 'POST' , 'DELETE' , 'PUT'],
+  credentials: true
+}));
+
 
 // Serve uploaded images statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
