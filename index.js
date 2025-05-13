@@ -7,7 +7,7 @@ const path = require("path");
 const Products = require("./models/products");
 
 const app = express();
-const DB = "mongodb://localhost:27017/memento_wold";
+const DB = process.env.MONGO_URI;
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
