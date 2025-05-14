@@ -11,9 +11,9 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     size: {
-        length: { type: Number, required: false },
-        breadth: { type: Number, required: false },
-        height: { type: Number, required: false }
+        length: { type: Number },
+        breadth: { type: Number },
+        height: { type: Number }
     },
     type: {
         type: String,

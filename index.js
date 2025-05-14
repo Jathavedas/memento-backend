@@ -24,22 +24,23 @@ app.post("/api/add_products", upload.array("images", 5), async (req, res) => {
   try {
     const { name, length, breadth, height, price, stock } = req.body;
 
-    if (!req.files || !name || !length || !breadth || !height || !price || !stock) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!req.files || !name || !price || !stock) {
+      return res.status(400).json({ message: "Name, price, stock, and images are required" });
     }
 
     const imageUrls = req.files.map(file => file.path); // Cloudinary image URLs
 
+    const size = {};
+    if (length) size.length = parseFloat(length);
+    if (breadth) size.breadth = parseFloat(breadth);
+    if (height) size.height = parseFloat(height);
+
     const newProduct = new Products({
       name,
       images: imageUrls,
-      size: {
-        length: parseFloat(length),
-        breadth: parseFloat(breadth),
-        height: parseFloat(height),
-      },
       price: parseFloat(price),
       stock: parseInt(stock),
+      ...(Object.keys(size).length > 0 && { size }), // only add size if any value exists
     });
 
     await newProduct.save();
@@ -48,6 +49,7 @@ app.post("/api/add_products", upload.array("images", 5), async (req, res) => {
     res.status(500).json({ message: "Error adding product", error: error.message });
   }
 });
+
 
 // ✅ Get all products
 app.get("/api/disp/products", async (req, res) => {
